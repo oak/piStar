@@ -872,33 +872,14 @@ $('#modal-button-load-model').click(function () {
     }, 20);
 });
 
-$('#menu-button-save-local').click(function () {
+$('#menu-button-save-model-to-local-storage').click(function () {
     'use strict';
 
-    var model = istar.fileManager.saveModel();
-    localStorage.setItem(`model`, model);
+    istar.fileManager.saveModelToLocalStorage();
 });
 
-$('#menu-button-load-local').click(function () {
-    'use strict';
-
-    try {
-        var localStorageInput = localStorage.getItem("model");
-        if (localStorageInput.length === 0) {
-            ui.alert('No content found', 'Local Storage');
-        } else {
-            //else, load model from input
-            if (ui.getSelectedCells()[0]) {
-                ui.hideSelection();
-            }
-            ui.resetCellDisplayStates();
-            istar.fileManager.loadModel(localStorageInput);//do the actual loading
-            ui.selectPaper();//select the model (as a whole)
-        }
-    } catch (error) {
-        ui.alert('Sorry, the input model is not valid.', 'Error loading from local storage');
-        console.log(error.stack);
-    }
+$('#menu-button-load-model-from-local-storage').click(function () {
+    ui.localStorageTable = new ui.components.ModelVersionsTableView({model: istar.fileManager.getAllModelsAndVersions()}).render();
 });
 
 ui.setupUi = function () {

@@ -6,12 +6,14 @@
  * https://github.com/jhcp/pistar
  */
 
-istar.fileManager = function() {
+istar.fileManager = function () {
     'use strict';
 
     var invalidMessages = [];
 
-    function getCustomPropertiesJSON (cell) {
+    const LOCAL_STORAGE_MODEL_PREFIX="model:";
+
+    function getCustomPropertiesJSON(cell) {
         return cell.prop('customProperties');
     }
 
@@ -39,7 +41,7 @@ istar.fileManager = function() {
     }
 
     return {
-        saveSvg: function(paper) {
+        saveSvg: function (paper) {
             //access the SVG element and serialize it
             $('svg').attr('width', istar.paper.getArea().width);
             $('svg').attr('height', istar.paper.getArea().height);
@@ -68,7 +70,7 @@ istar.fileManager = function() {
             imageElement.onload = function () {
                 canvas.width = imageElement.width * resolutionFactor; //multiply the width for better resolution
                 canvas.height = imageElement.height * resolutionFactor; //multiply the height for better resolution
-                if ( !transparent ) {
+                if (!transparent) {
                     //fill the canvas with a color
                     canvasContext.fillStyle = 'white';
                     canvasContext.fillRect(0, 0, canvas.width, canvas.height);
@@ -81,6 +83,36 @@ istar.fileManager = function() {
 
             };
 
+        },
+        saveModelToLocalStorage: function () {
+            var stringyfiedModel = this.saveModel();
+
+            // TODO: Should limit max saves?
+            if (stringyfiedModel) {
+                var model = JSON.parse(stringyfiedModel);
+                var itemEntries = JSON.parse(localStorage.getItem(model.diagram.name)) ?? [];
+                var removedIfSameVersion = itemEntries.filter(item => item.version !== parseInt(model.diagram.version))
+                removedIfSameVersion.push({version: parseInt(model.diagram.version), model: model})
+                localStorage.setItem(`${LOCAL_STORAGE_MODEL_PREFIX}${model.diagram.name}`, JSON.stringify(removedIfSameVersion));
+            } else {
+                //TODO: Error on saveModel?
+            }
+
+        },
+        getAllModelsAndVersions: function () {
+            let modelsAndVersions = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                let keyName = localStorage.key(i);
+                if (keyName.startsWith(LOCAL_STORAGE_MODEL_PREFIX)) {
+                    const itemEntries = JSON.parse(localStorage.getItem(keyName));
+                    modelsAndVersions.push({model: keyName.substring(LOCAL_STORAGE_MODEL_PREFIX.length), versions: itemEntries.map(item => item.version)});
+                }
+            }
+
+            return modelsAndVersions;
+        },
+        loadModelFromLocalStorage: function(modelName, modelVersion) {
+            return JSON.parse(localStorage.getItem(LOCAL_STORAGE_MODEL_PREFIX.concat(modelName))).filter(item => item.version === parseInt(modelVersion))[0].model
         },
         saveModel: function () {
             var diagram = {width: 1300, height: 1300};
@@ -133,8 +165,7 @@ istar.fileManager = function() {
                     $.extend(true, modelJSON.display, children.display);
                     actorJSON.nodes = children.nodes;
                     modelJSON.actors.push(actorJSON);
-                }
-                else if (element.isDependum()) {
+                } else if (element.isDependum()) {
                     var dependency = elementToJSON(element);
                     dependency.source = istar.graph.getConnectedLinks(element, {inbound: true})[0].attributes.source.id;
                     dependency.target = istar.graph.getConnectedLinks(element, {outbound: true})[0].attributes.target.id;
@@ -163,8 +194,7 @@ istar.fileManager = function() {
                     }
 
                     modelJSON.dependencies.push(dependency);
-                }
-                else if (!element.attributes.parent) {
+                } else if (!element.attributes.parent) {
                     var orphan = elementToJSON(element);
                     var display = {};
                     var needToSaveDisplay = false;
@@ -212,7 +242,7 @@ istar.fileManager = function() {
 
             return outputSavedModel(modelJSON);
 
-            function childrenToJSON (element) {
+            function childrenToJSON(element) {
                 var result = {nodes: [], display: {}};
 
                 _.forEach(element.getEmbeddedCells(), function (element) {
@@ -243,7 +273,7 @@ istar.fileManager = function() {
                 return result;
             }
 
-            function elementToJSON (element) {
+            function elementToJSON(element) {
                 var text = element.prop('name');
                 var result = {
                     'id': element.id,
@@ -261,7 +291,7 @@ istar.fileManager = function() {
                 return result;
             }
 
-            function linkToJSON (link) {
+            function linkToJSON(link) {
                 var result = {
                     id: link.id,
                     type: istar.metamodel.prefix + '.' + link.prop('type'),
@@ -278,7 +308,7 @@ istar.fileManager = function() {
                 return result;
             }
 
-            function outputSavedModel (modelJson, newTab) {
+            function outputSavedModel(modelJson, newTab) {
                 var stringifiedModel = JSON.stringify(modelJson, null, 2);
                 if (newTab) {
                     window.open("data:text/json;charset=utf-8," + encodeURI(stringifiedModel));//this open the content of the file in a new tab
@@ -392,13 +422,12 @@ istar.fileManager = function() {
                         dependum.prop('position/y', element.y);
 
 
-
                     }
 
                     //create links
                     for (i = 0; i < inputModel.links.length; i++) {
                         var linkJSON = inputModel.links[i];
-                        if (! isDependencyLink(linkJSON)) {
+                        if (!isDependencyLink(linkJSON)) {
                             var newLink = addLoadedLink(linkJSON);
                             if (inputModel.display && inputModel.display[linkJSON.id] && inputModel.display[linkJSON.id].vertices) {
                                 newLink.set('vertices', inputModel.display[linkJSON.id].vertices);
@@ -412,11 +441,11 @@ istar.fileManager = function() {
                 }
 
             }
-            if (_.size(invalidMessages)>0) {
+            if (_.size(invalidMessages) > 0) {
                 istar.displayInvalidModelMessages(invalidMessages);
             }
 
-            function addLoadedElement (element, display) {
+            function addLoadedElement(element, display) {
                 if (element.id && element.type && element.x && element.y) {
                     element.text = element.text || '';
                     var type = element.type.split('.')[1];
@@ -459,7 +488,7 @@ istar.fileManager = function() {
                 }
             }
 
-            function addLoadedLink (linkJSON) {
+            function addLoadedLink(linkJSON) {
                 if (linkJSON.id && linkJSON.type && linkJSON.source && linkJSON.target) {
                     var typeNameWithoutPrefix = linkJSON.type.split('.')[1];
                     if (istar['add' + typeNameWithoutPrefix]) {
@@ -502,7 +531,7 @@ istar.fileManager = function() {
                 }
             }
 
-            function processInvalidLink (typeName, source, target, isValid) {
+            function processInvalidLink(typeName, source, target, isValid) {
                 var parent = source.parent();
                 var parentText = '';
                 if (parent) {
@@ -513,7 +542,7 @@ istar.fileManager = function() {
                 invalidMessages.push(message);
             }
 
-            function isDependencyLink (linkJSON) {
+            function isDependencyLink(linkJSON) {
                 var result = false;
                 if (linkJSON.id && linkJSON.type) {
                     if (linkJSON.type.includes('DependencyLink')) {

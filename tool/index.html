@@ -88,13 +88,14 @@ https://github.com/jhcp/pistar
             <div class="menu-group">
                 <div class="menu-line">
 
-                    <a class="btn btn-default button-vertical" id="menu-button-load-local" title="Load model from local storage" data-toggle="modal" data-target="#modal-load-local">
+                    <a class="btn btn-default button-vertical" id="menu-button-load-model-from-local-storage" data-toggle="modal" data-target="#modal-load-model-from-local-storage"
+                       title="Load model from local storage">
                         <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
                         <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span><br>
                         Load Local
                     </a>
 
-                    <a class="btn btn-default button-vertical" id="menu-button-save-local" title="Save model in local storage" data-toggle="modal" data-target="#modal-save-local">
+                    <a class="btn btn-default button-vertical" id="menu-button-save-model-to-local-storage" title="Save model in local storage" data-toggle="modal" data-target="#modal-save-model-to-local-storage">
                         <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
                         <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span><br>
                         Save Local
@@ -394,6 +395,16 @@ https://github.com/jhcp/pistar
     </tr>
 </script>
 
+<script type="text/template" id="model-and-versions-table-template">
+    <tr>
+        <th scope="row" class="model-name"><%- modelName %></th>
+        <td class="model-path">
+            <a href="#" id="<%- modelName %>" class="model-path" data-type="model" data-pk="<%- modelPath %>"
+               data-name="<%- modelName %>" data-title="Select <%- modelName %> v<%- modelPath %>"><%- modelPath %></a>
+        </td>
+    </tr>
+</script>
+
 <div id="modals">
 
     <div class="modal fade" id="modal-save-image" tabindex="-1" role="dialog" aria-labelledby="label-save-image-modal">
@@ -471,6 +482,33 @@ https://github.com/jhcp/pistar
                         model
                     </button>
                     <button id="modal-button-close-load-model" type="button" class="btn" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-load-model-from-local-storage" tabindex="-1" role="dialog" aria-labelledby="label-load-model-from-local-storage-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="label-load-model-from-local-storage-modal">Load i* model from local storage</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover" id="modal-load-model-from-local-storage-table">
+                        <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Version</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-button-close-load-model-from-local-storage" type="button" class="btn" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -607,6 +645,7 @@ https://github.com/jhcp/pistar
 <script src="app/ui/views/addButtonDropdownItem.js"></script>
 <script src="app/ui/controllers/addButton.js"></script>
 <script src="app/ui/views/propertiesTable.js"></script>
+<script src="app/ui/views/modelVersionsTable.js"></script>
 <script src="app/ui/istarmodels.js"></script>
 
 <!-- auto-layout -->
