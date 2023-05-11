@@ -29,12 +29,10 @@ ui.components.ModelVersionsTableView = Backbone.View.extend({
 
         this.$table.find('tbody').html('');
         this.model.forEach((item) => {
-            item.versions.forEach((version) => {
-                this.$table.find('tbody').append(this.template({
-                    modelName: item.model,
-                    modelPath: version,
-                }));
-            })
+            this.$table.find('tbody').append(this.template({
+                modelName: item.model,
+                modelPath: item.version,
+            }));
         });
     },
     setupElementClick: function () {

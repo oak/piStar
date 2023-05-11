@@ -90,10 +90,26 @@ istar.fileManager = function () {
             // TODO: Should limit max saves?
             if (stringyfiedModel) {
                 var model = JSON.parse(stringyfiedModel);
-                var itemEntries = JSON.parse(localStorage.getItem(model.diagram.name)) ?? [];
-                var removedIfSameVersion = itemEntries.filter(item => item.version !== parseInt(model.diagram.version))
-                removedIfSameVersion.push({version: parseInt(model.diagram.version), model: model})
-                localStorage.setItem(`${LOCAL_STORAGE_MODEL_PREFIX}${model.diagram.name}`, JSON.stringify(removedIfSameVersion));
+                var itemEntries = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MODEL_PREFIX.concat(model.diagram.name))) ?? [];
+                if (itemEntries.filter(item => item.version === parseInt(model.diagram.version)).length > 0) {
+                    ui.confirm({
+                        message: 'ATTENTION! There is already a saved model with the same version. Are you sure you want to replace it?',
+                        callback: function (result) {
+                            if (result) {
+                                itemEntries = itemEntries.filter(item => item.version !== parseInt(model.diagram.version))
+                                itemEntries.push({version: parseInt(model.diagram.version), model: model})
+                                localStorage.setItem(`${LOCAL_STORAGE_MODEL_PREFIX}${model.diagram.name}`, JSON.stringify(itemEntries));
+                                ui.alert(`Replaced diagram '${model.diagram.name}' with version ${model.diagram.version}`);
+                            } else {
+                                ui.alert('Save canceled!')
+                            }
+                        }
+                    })
+                } else {
+                    itemEntries.push({version: parseInt(model.diagram.version), model: model})
+                    localStorage.setItem(`${LOCAL_STORAGE_MODEL_PREFIX}${model.diagram.name}`, JSON.stringify(itemEntries));
+                    ui.alert(`Saved diagram '${model.diagram.name}' with version ${model.diagram.version}`);
+                }
             } else {
                 //TODO: Error on saveModel?
             }
@@ -105,11 +121,17 @@ istar.fileManager = function () {
                 let keyName = localStorage.key(i);
                 if (keyName.startsWith(LOCAL_STORAGE_MODEL_PREFIX)) {
                     const itemEntries = JSON.parse(localStorage.getItem(keyName));
-                    modelsAndVersions.push({model: keyName.substring(LOCAL_STORAGE_MODEL_PREFIX.length), versions: itemEntries.map(item => item.version)});
+                    itemEntries.map(item => {
+                        modelsAndVersions.push({
+                            model: keyName.substring(LOCAL_STORAGE_MODEL_PREFIX.length),
+                            version: item.model.diagram.version,
+                            saveDate: item.model.saveDate
+                        })
+                    });
                 }
             }
 
-            return modelsAndVersions;
+            return _.sortBy(modelsAndVersions, ["saveDate"]).reverse()
         },
         loadModelFromLocalStorage: function(modelName, modelVersion) {
             return JSON.parse(localStorage.getItem(LOCAL_STORAGE_MODEL_PREFIX.concat(modelName))).filter(item => item.version === parseInt(modelVersion))[0].model
