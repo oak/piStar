@@ -551,6 +551,7 @@ istar.models.pistarWelcome = {
         "width": 1000,
         "height": 700,
         "name": "Welcome Model",
+        "version": 1,
         "customProperties": {
             "Description": "Welcome to the piStar tool version 2.1.0, released on November, 2021! This model describes some of the recent improvements in the tool. Click on the purple elements for further info.\n\nFor help using this tool, please check the Help menu above"
         }
@@ -1313,6 +1314,7 @@ istar.models.travelReimbursement = {
         "width": 1500,
         "height": 1100,
         "name": "University travel reimbursement",
+        "version": 1,
         "customProperties": {
             "Description": "Students must organize their travel (e.g., to conferences) and have several goals to achieve, and options to achieve them. To achieve their goals, students rely on other parties such as a Travel Agency and the university’s trip management information system.",
             "Origin": "This is the example presented in the iStar 2.0 Language Guide, which can be accessed through the Help menu"
@@ -3603,6 +3605,7 @@ istar.models.smartHome = {
         "width": 1784,
         "height": 1475,
         "name": "Contextual Smart Home",
+        "version": 1,
         "customProperties": {
             "Description": "This is a Smart Home system based on the reference below, which itself was based on work by Fabiano Dalpiaz and Raian Ali. \n\nSome elements and links contain contextual annotations, such as the \"Request restaurant meal\" dependum highlighted in blue.",
             "Reference": "Based on João Pimentel, Marcia Lucena, Jaelson Castro, Carla Silva, Fernanda Alencar, Emanuel Santos. Deriving software architectural models from requirements models for adaptive systems: the STREAM-A approach. In: Requirements Engineering Journal, 17, 4, 2012, pp. 259-281. DOI: 10.1007/s00766-011-0126-z"
@@ -4261,6 +4264,7 @@ istar.models.everyElementAndLink = {
         "width": 1100,
         "height": 600,
         "name": "Every iStar 2.0 element and link",
+        "version": 1,
         "customProperties": {
             "Description": "This is an example showing every iStar 2.0 element and link.\n\nKinds of actor:\n - Actor, Agent and Role\n\nDependency links:\n - Goal, Quality, Task and Resource dependency\n\nActor links:\n - Is-A and Participates-In\n\nInner elements:\n - Goal, Quality, Task, Resource\n\nInner element links:\n - And-refinement, Or-refinement, Needed-By, Qualification, and Contribution links (make, help, hurt, break)",
             "Tooltip": "Click on \"Toggle fullscreen\" in the Options menu to facilitate the use of the tool\n\nAlso, click on the elements and links of this model to learn more about the iStar 2.0 language",
@@ -4956,6 +4960,7 @@ istar.models.buyerDrivenECommerce = {
         "width": 1244,
         "height": 700,
         "name": "Buyer-driven e-commerce system",
+        "version": 1,
         "customProperties": {
             "Description": "Example of a buyer-driven e-commerce system. In such a system, the customer depends on a middleman to find a service provider who is willing to accept a price set by the customer. The customer submits a priced request to a middleman. The middleman forwards the request to suppliers. If a supplier decides to accept the request, it makes an agreement with the middleman. The middleman expects the customer to pay for the purchase in time.",
             "Colors": "Checkout the yellow elements, they have textual descriptions",

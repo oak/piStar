@@ -615,6 +615,7 @@ var istar = function () {
         clearModel: function () {
             istar.graph.clear();
             istar.graph.prop('name', '');
+            istar.graph.prop('version', 1);
             istar.graph.prop('customProperties', '');//delete all custom properties
             istar.graph.prop('customProperties/Description', '');//set back the 'Description' property
             istar.undoManager.reset();

@@ -19,6 +19,7 @@ ui.components.PropertiesTableView = Backbone.View.extend({
         this.listenTo(this.model, 'mouseup', this.render);
         this.listenTo(this.model, 'change:customProperties', this.render);
         this.listenTo(this.model, 'change:name', this.render);
+        this.listenTo(this.model, 'change:version', this.render);
     },
 
     render: function () {
@@ -26,6 +27,9 @@ ui.components.PropertiesTableView = Backbone.View.extend({
 
         this.renderElementName();
         this.setupElementNameEditing();
+
+        this.renderElementVersion();
+        this.setupElementVersionEditing();
 
         this.renderElementType();
         this.setupElementTypeEditing();
@@ -83,7 +87,19 @@ ui.components.PropertiesTableView = Backbone.View.extend({
             propertyName: 'Name',
             propertyValue: this.model.prop('name'),
             dataType: 'text'
-        }));
+        }))
+    },
+    renderElementVersion: function () {
+        'use strict';
+
+        // TODO: Is this the way to get the topmost parent node?
+        if (!this.model.graph) {
+            this.$table.find('tbody').append(this.template({
+                propertyName: 'Version',
+                propertyValue: this.model.prop('version'),
+                dataType: 'number'
+            }));
+        }
     },
     renderElementType: function () {
         'use strict';
@@ -125,6 +141,27 @@ ui.components.PropertiesTableView = Backbone.View.extend({
             .on('hidden', function () {
                 ui.states.editor.transitionTo(ui.states.editor.VIEWING);
             });
+    },
+    setupElementVersionEditing: function () {
+        'use strict';
+
+        // TODO: Is this the way to get the topmost parent node?
+        if (!this.model.graph) {
+            var currentElementModel = this.model;
+            this.$table.find('a').editable({
+                showbuttons: 'bottom',
+                success: function (response, newValue) {
+                    currentElementModel.prop('version', newValue);
+                    return {newValue: currentElementModel.prop('version')};
+                }
+            })
+                .on('shown', function () {
+                    ui.states.editor.transitionTo(ui.states.editor.EDITING_TEXT);
+                })
+                .on('hidden', function () {
+                    ui.states.editor.transitionTo(ui.states.editor.VIEWING);
+                });
+        }
     },
     setupElementTypeEditing: function () {
         'use strict';

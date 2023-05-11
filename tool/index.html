@@ -85,6 +85,22 @@ https://github.com/jhcp/pistar
 
                 </div>
             </div>
+            <div class="menu-group">
+                <div class="menu-line">
+
+                    <a class="btn btn-default button-vertical" id="menu-button-load-local" title="Load model from local storage" data-toggle="modal" data-target="#modal-load-local">
+                        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span><br>
+                        Load Local
+                    </a>
+
+                    <a class="btn btn-default button-vertical" id="menu-button-save-local" title="Save model in local storage" data-toggle="modal" data-target="#modal-save-local">
+                        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span><br>
+                        Save Local
+                    </a>
+                </div>
+            </div>
         </div>
         <div id="menu-add" class="menu-body">
             <div class="menu-group">
@@ -192,6 +208,20 @@ https://github.com/jhcp/pistar
                        title="Fullscreen toggle">
                       <span class="glyphicon glyphicon-fullscreen"></span> Toggle fullscreen
                     </a>
+                </span>
+            </div>
+
+            <div class="menu-group">
+                <span class="menu-line">
+                    <div class="checkbox">
+                        <label for="menu-cbox-auto-save">
+                            <input id="menu-cbox-auto-save" type="checkbox" title="Enable/Disable auto save in local storage">
+                            Save periodically in local storage
+                        </label>
+                    </div>
+                </span>
+                <span class="menu-line">
+                    <input id="input-auto-save-interval" type="text" value="30" size="4" maxlength="6" title="Auto save interval" placeholder="Every X seconds..."/>
                 </span>
             </div>
 

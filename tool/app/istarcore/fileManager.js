@@ -89,6 +89,9 @@ istar.fileManager = function() {
             if (istar.graph.prop('name')) {
                 diagram.name = istar.graph.prop('name');
             }
+            if (istar.graph.prop('version')) {
+                diagram.version = istar.graph.prop('version');
+            }
             var customPropertiesJSON = getCustomPropertiesJSON(istar.graph);
             if (customPropertiesJSON) {
                 diagram.customProperties = customPropertiesJSON;
@@ -302,6 +305,7 @@ istar.fileManager = function() {
                         istar.paper.setDimensions(inputModel.diagram.width, inputModel.diagram.height);
                     }
                     istar.graph.prop('name', inputModel.diagram.name);
+                    istar.graph.prop('version', inputModel.diagram.version);
                     if (inputModel.diagram.customProperties) {
                         istar.graph.prop('customProperties', inputModel.diagram.customProperties)
                     }
