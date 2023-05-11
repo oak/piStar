@@ -85,11 +85,11 @@ istar.fileManager = function () {
 
         },
         saveModelToLocalStorage: function () {
-            var stringyfiedModel = this.saveModel();
+            var stringModel = this.saveModel();
 
             // TODO: Should limit max saves?
-            if (stringyfiedModel) {
-                var model = JSON.parse(stringyfiedModel);
+            if (stringModel) {
+                var model = JSON.parse(stringModel);
                 var itemEntries = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MODEL_PREFIX.concat(model.diagram.name))) ?? [];
                 if (itemEntries.filter(item => item.version === parseInt(model.diagram.version)).length > 0) {
                     ui.confirm({
@@ -126,12 +126,28 @@ istar.fileManager = function () {
                             model: keyName.substring(LOCAL_STORAGE_MODEL_PREFIX.length),
                             version: item.model.diagram.version,
                             saveDate: item.model.saveDate
-                        })
+                        });
                     });
                 }
             }
 
             return _.sortBy(modelsAndVersions, ["saveDate"]).reverse()
+        },
+        deleteModelFromLocalStorage: function(modelName, modelVersion) {
+            ui.confirm({
+                message: `ATTENTION! Are you sure you want to remove diagram '${modelName}' version ${modelVersion}?`,
+                callback: function (result) {
+                    if (result) {
+                        let itemEntries = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MODEL_PREFIX.concat(modelName)));
+                        itemEntries = itemEntries.filter(item => item.version !== parseInt(modelVersion));
+                        localStorage.setItem(`${LOCAL_STORAGE_MODEL_PREFIX}${modelName}`, JSON.stringify(itemEntries));
+                        ui.loadLocalStorageTable();
+                        ui.alert(`Removed diagram '${modelName}' with version ${modelVersion}`);
+                    } else {
+                        ui.alert('Removal canceled!')
+                    }
+                }
+            })
         },
         loadModelFromLocalStorage: function(modelName, modelVersion) {
             return JSON.parse(localStorage.getItem(LOCAL_STORAGE_MODEL_PREFIX.concat(modelName))).filter(item => item.version === parseInt(modelVersion))[0].model

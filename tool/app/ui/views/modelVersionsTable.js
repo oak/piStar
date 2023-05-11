@@ -38,11 +38,10 @@ ui.components.ModelVersionsTableView = Backbone.View.extend({
     setupElementClick: function () {
         'use strict';
 
-        this.$table.find('a').click((e) => {
-            let modelName = $(e.target).attr('data-name');
-            let modelVersion = $(e.target).attr('data-pk');
+        this.$table.find('a[data-type="open"]').click((e) => {
+            let modelName = $(e.currentTarget).attr('data-name');
+            let modelVersion = $(e.currentTarget).attr('data-pk');
 
-            console.log(modelName, modelVersion)
             const model = istar.fileManager.loadModelFromLocalStorage(modelName, modelVersion);
 
             if (model) {
@@ -52,9 +51,17 @@ ui.components.ModelVersionsTableView = Backbone.View.extend({
 
                 $('#modal-load-model-from-local-storage').modal('hide');
             } else {
-                ui.alert('Sorry, this kind of file is not valid', 'Error loading file');
+                ui.alert('An error occurred while loading this model', 'Error loading model');
                 $('#modal-load-model-from-local-storage').modal('hide');
             }
+        });
+
+        this.$table.find('a[data-type="remove"]').click((e) => {
+            let modelName = $(e.currentTarget).attr('data-name');
+            let modelVersion = $(e.currentTarget).attr('data-pk');
+
+            console.log('deleting', modelName, modelVersion);
+            istar.fileManager.deleteModelFromLocalStorage(modelName, modelVersion);
         });
     },
 });

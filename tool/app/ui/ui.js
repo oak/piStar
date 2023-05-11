@@ -814,6 +814,9 @@ ui.connectLinksToShape = function () {
         ui.selectPaper();
     }, 100);
 };
+ui.loadLocalStorageTable = function () {
+    ui.localStorageTable = new ui.components.ModelVersionsTableView({model: istar.fileManager.getAllModelsAndVersions()}).render();
+}
 
 $('#menu-button-save-model').click(function () {
     'use strict';
@@ -879,7 +882,7 @@ $('#menu-button-save-model-to-local-storage').click(function () {
 });
 
 $('#menu-button-load-model-from-local-storage').click(function () {
-    ui.localStorageTable = new ui.components.ModelVersionsTableView({model: istar.fileManager.getAllModelsAndVersions()}).render();
+    ui.loadLocalStorageTable();
 });
 
 ui.setupUi = function () {

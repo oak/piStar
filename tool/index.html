@@ -399,8 +399,12 @@ https://github.com/jhcp/pistar
     <tr>
         <th scope="row" class="model-name"><%- modelName %></th>
         <td class="model-path">
-            <a href="#" id="<%- modelName %>" class="model-path" data-type="model" data-pk="<%- modelPath %>"
-               data-name="<%- modelName %>" data-title="Select <%- modelName %> v<%- modelPath %>"><%- modelPath %></a>
+            <a href="#" id="<%- modelName.replaceAll(' ', '') %>v<%- modelPath %>" class="model-path" data-type="open" data-pk="<%- modelPath %>"
+               data-name="<%- modelName %>" data-title="Load <%- modelName %> v<%- modelPath %>"><%- modelPath %></a>
+        </td>
+        <td>
+            <a href="#" id="remove<%- modelName.replaceAll(' ', '') %>v<%- modelPath %>" class="model-path" data-type="remove" data-pk="<%- modelPath %>"
+               data-name="<%- modelName %>" data-title="Remove <%- modelName %> v<%- modelPath %>"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span><br /></a>
         </td>
     </tr>
 </script>
@@ -502,6 +506,7 @@ https://github.com/jhcp/pistar
                             <tr>
                                 <th>Model</th>
                                 <th>Version</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
